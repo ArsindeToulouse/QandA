@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Вопроы и ответы</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="css/qanda.css"  media="screen,projection"/>
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<!-- Заголовок страницы -->
+	<header></header>
+	<!-- Основное содержимое страницы -->
+	<section class="wrapper">
+		<article class="row">
+			<div class="col s12 m4">
+				<div class="card">
+					<div>
+						<img src="../img/Data-Edit-128.png">
+						<span class="card-title">Контент</span>
+					</div>
+					<div class="card-action">
+						<a href="/admin.php?page=content">управление контентом</a>
+					</div>
+				</div>
+			</div>
+        	<div class="col s12 m4">
+				<div class="card">
+					<div>
+						<img src="../img/User-Group-128.png">
+						<span class="card-title">Пользователи</span>
+					</div>
+					<div class="card-action">
+						<a href="/admin.php?page=admin">управление пользователями</a>
+					</div>
+				</div>
+			</div>
+			<div class="col s12 m4">
+				<div class="card">
+					<div>
+						<img src="../img/Note-Memo-01-128.png">
+						<span class="card-title">Логи</span>
+					</div>
+					<div class="card-action">
+						<a href="/admin.php?page=log">просмотр логов</a>
+					</div>
+				</div>
+			</div>
+		</article>
+	</section>
+	<!-- Подвал страницы -->
+	<footer></footer>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/materialize.min.js"></script>
+	<script>
+		$( document ).ready(function(){
+		  $(".button-collapse").sideNav();
+		})
+	</script>
+</body>
+</html>

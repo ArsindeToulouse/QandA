@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Вопроы и ответы</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="css/qanda.css"  media="screen,projection"/>
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="wrapper">
+		<!-- верхний колонтитул -->
+		<header class="row header">
+			<div class="logo">Вопросы и ответы...</div>
+		</header>
+		<section id="content" class="content">
+    {% if addForm %}
+    <form enctype="multipart/form-data" action="admin.php?page=admin" method="post">
+      <div class="row form-container">
+        <div class="input-field col s2">
+          <input id="login" type="text" class="validate" name="add[login]" value="">
+          <label for="login">Логин</label>
+        </div>
+        <div class="input-field col s2">
+          <input id="email" type="text" class="validate" name="add[email]" value="">
+          <label for="email">Эл. почта</label>
+        </div>
+        <div class="input-field col s2">
+          <input id="rights" type="text" class="validate" name="add[rights]" value="">
+          <label for="rights">Права</label>
+        </div>
+        <div class="input-field col s2">
+          <input id="pass" type="text" class="validate" name="add[pass]" value="">
+          <label for="pass">Пароль</label>
+        </div>
+      <button class="btn-flat" type="submit" name="submit_add" value="submit_add">
+        добавить
+      </button>
+      </div>
+    </form>
+    {% else %}
+    <form enctype="multipart/form-data" action="admin.php?page=admin" method="post">
+      <button class="btn-flat" type="submit" name="add" value="add">
+        <img src="../img/Document-Add-02-24.png" alt="добавить">
+        добавить администратора
+      </button>
+    </form>
+    {% endif %}
+    {% if changeForm %}
+    <form enctype="multipart/form-data" action="admin.php?page=admin" method="post">
+      <div class="row form-container">
+        <div class="input-field col s2">
+          <input id="pass" type="text" class="validate" name="change_pass" value="{{ changePass }}">
+          <label for="pass">Новый пароль</label>
+        </div>
+      <button class="btn-flat" type="submit" name="submit_change" value="ok">
+        ОК
+      </button>
+      </div>
+    </form>
+    {% endif %}
+    <form enctype="multipart/form-data" action="admin.php?page=admin" method="post">
+			<table class="bordered striped">
+        <thead>
+          <tr>
+              <th data-field="id"></th>
+              <th data-field="name">Логин</th>
+              <th data-field="email">Эл. почта</th>
+              <th data-field="rights">Права</th>
+              <th data-field="actions">Операции</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.id }}</td>
+            <td>{{row.name}}</td>
+            <td>{{row.email}}</td>
+            <td>{{row.rights}}</td>
+            <td>
+              <button class="btn-flat btn-img" type="submit" name="delete" value="{{ row.id }}">
+                <img title="удалить" src="../img/Document-Delete-02-24.png" alt="удалить">
+              </button>
+              <button class="btn-flat btn-img" type="submit" name="change" value="{{ row.id }}">
+                <img title="сменить пароль" src="../img/Password-Text-01-24.png" alt="сменить пароль">
+              </button>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </form>
+		</section>
+		<!-- нижний колонтитул -->
+		<footer class="footer">
+			<div class="copyright">"Гениальные мысли" @ 2016</div>
+		</footer>
+	</div>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script>
+    $( document ).ready(function(){
+      $(".button-collapse").sideNav();
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+    "name": "arsinde/qanda",
+    "authors": [
+        {
+            "name": "arsinde",
+            "email": "yulia.rgva@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "~1.0"
+    }
+}

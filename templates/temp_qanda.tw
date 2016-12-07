@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Вопроы и ответы</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="css/qanda_user.css"  media="screen,projection"/>
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="wrapper">
+		<header class="header">
+			<div class="row">
+				Cogito ergo sum.
+			</div>
+		</header>
+		<section class="row">
+			<article class="col s12 m4">
+				<div class="row">
+					<form enctype="multipart/form-data" action="qanda.php" method="post">
+				        {% for categoryRow in categoryRows %}
+				        	<button class="waves-effect btn-flat btn-weight" type="submit" name="action" value="{{categoryRow.id}}">
+				        		{{ categoryRow.title }}
+				        	</button>
+				        {% endfor %}
+					</form>
+				</div>
+			</article>
+			<article class="col s12 m8">
+			{% if categoryTitle %}
+				<h4>{{ categoryTitle }}</h4>
+				<ul class="collapsible no-shadow" data-collapsible="accordion">
+					{% for question in questions %}
+					<li>
+						<div class="collapsible-header">
+							<div class="flex-container">
+								<img class="flex-element" src="../img/Help-24.png" alt="">
+								<div class="flex-element header-text">{{ question.q_text }}</div>
+								<img id="arrow" class="flex-element" src="../img/Arrowhead-Down-16.png" alt="">
+							</div>
+						</div>
+						<div class="collapsible-body"><p>{{ question.a_text }}</p></div>
+					</li>
+					{% endfor %}
+				  </ul>
+			{% endif %}
+				<div class="row">
+				{% if error %}
+					<div class="form-error">
+						<span class="flow-text">{{ error }}</span>
+					</div>
+				{% endif %}
+				{% if success %}
+					<div class="form-success">
+						<span class="flow-text">{{ success }}</span>
+					</div>
+				{% endif %}
+					<form name="form" class="col s12 form-container" enctype="multipart/form-data" action="qanda.php" method="post">
+						<div class="row">
+							<div class="input-field col s6">
+								<i class="material-icons prefix">contacts</i>
+								<input id="login" type="text" pattern="[a-zA-Z а-яА-Я]*" class="validate" name="q[name]" value="{{ q.name }}" required>
+								<label for="login">Представтесь</label>
+							</div>
+							<div class="input-field col s6">
+								<i class="material-icons prefix">email</i>
+								<input id="email" type="email" class="validate" name="q[email]" value="{{ q.email }}" required>
+          						<label for="email" data-error="неверный адрес" data-success="ОК">Эл. почта</label>
+							</div>
+						</div>
+						<div class="input-field col s12">
+							<select id="qst" name="q[selectCategory]">
+								<option value="" disabled selected>Выберите категорию</option>
+							{% for categoryRow in categoryRows %}
+								<option value="{{categoryRow.id}}">{{ categoryRow.title }}</option>
+							{% endfor %}
+							</select>
+							<label>Категория вопроса</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">mode_edit</i>
+							<textarea id="question" class="materialize-textarea" pattern="[a-zA-Z а-яА-Я]*" name="q[questionText]" value="{{ q.questionText }}" required></textarea>
+							<label for="question">Текст вопроса</label>
+						</div>
+						<div class="row">
+							<div class="col s8"></div>
+							<button id="submit" class="waves-effect btn-flat btn-flat-submit col s4" type="submit" name="submit">
+				        		Отправить
+				        	</button>
+						</div>
+					</form>
+				</div>
+			</article>
+		</section>
+
+		<footer class="row footer">
+			<h6 class="">"Гениальные мысли" @ 2016</h6>
+		</footer>
+	</div>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+  	<script type="text/javascript" src="js/materialize.min.js"></script>
+  	<script>
+    	$( document ).ready(function(){
+      		$(".button-collapse").sideNav();
+      		$('select').material_select();
+      		$('.collapsible').collapsible({
+      			// A setting that changes the collapsible behavior to expandable instead of the default accordion style
+      			accordion: false,
+      			// Callback for Collapsible open
+				onOpen: function(el) { $('#arrow').attr('src', '../img/Arrowhead-Up-16.png'); },
+				// Callback for Collapsible close
+				onClose: function(el) { $('#arrow').attr('src', '../img/Arrowhead-Down-16.png'); }
+      		});
+      		// если вернулась ошибка обработкиформы вставляем значение введенное ранее в поле textarea
+      		$('#question').val("{{ q.questionText }}");
+  			$('#question').trigger('autoresize');
+      	});
+  	</script>
+</body>
+</html>

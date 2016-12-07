@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Вопроы и ответы</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="css/qanda.css"  media="screen,projection"/>
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="wrapper">
+		<!-- верхний колонтитул -->
+		<header class="row header">
+			<div class="logo">Вопросы и ответы...</div>
+		</header>
+
+		<!-- основное содержимое -->
+		<section class="content">
+			<div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a class="{{ statisticTab }}" href="#test1">Статистика</a></li>
+        <li class="tab col s3"><a class="{{ categoryTab }}" href="#test2">Категории</a></li>
+        <li class="tab col s3"><a class="{{ questionsTab }}" href="#test3">Вопросы</a></li>
+      </ul>
+    </div>
+
+    <!-- TAB 1 -->
+    <div id="test1" class="col s12">
+    	<form enctype="multipart/form-data" action="admin.php?page=admin" method="post">
+				<table class="bordered striped">
+			        <thead>
+			          	<tr>
+							<th data-field="id"></th>
+							<th data-field="name">Категория</th>
+							<th data-field="email">Кол. вопросов</th>
+							<th data-field="rights">Ждёт ответа</th>
+							<th data-field="actions">Опубликовано</th>
+							<th data-field="actions">Скрыто</th>
+			          	</tr>
+			        </thead>
+			        <tbody>
+			        {% for params in allParams %}
+			          	<tr>
+				            <td>{{ params.id }}</td>
+				            <td>{{ params.title }}</td>
+				            <td>{{ params.qcount }}</td>
+				            <td>{{ params.q_wait }}</td>
+				            <td>{{ params.q_public }}</td>
+				            <td>{{ params.q_block }}</td>
+			          	</tr>
+			        {% endfor %}
+			        </tbody>
+			    </table>
+		    </form>
+	</div>
+
+	<!-- TAB 2 -->
+    <div id="test2" class="col s12">
+    	<form enctype="multipart/form-data" action="admin.php?page=content" method="post">
+				<div class="row form-container">
+					<div class="input-field col s3">
+						<input id="pass" type="text" class="validate" name="new_category" value="">
+						<label for="pass">Название категории</label>
+					</div>
+					<button class="btn-flat" type="submit" name="submit_new_category" value="new">
+						<img src="../img/Note-04-24.png" alt="добавить">добавить категорию
+					</button>
+				</div>
+				<div class="row form-container">
+					<div class="input-field col s3">
+						<select name="select_category">
+							<option value="" disabled selected>Выберите категорию</option>
+							{% for category in categories %}
+							<option value="{{ category.id }}">{{ category.title }}</option>
+							{% endfor %}
+						</select>
+						<label>Категории</label>
+					</div>
+					<button class="btn-flat" type="submit" name="submit_delete_category" value="delete">
+						<img src="../img/Recycle-Bin-24.png" alt="удалить">удалить категорию
+					</button>
+					<button class="btn-flat" type="submit" name="submit_view_category" value="view">
+						<img src="../img/Documents-24.png" alt="просмотреть">просмотреть категорию
+					</button>
+				</div>
+			</form>
+			{% if categoryTitle %}
+			<div class="row col s6">
+				<h4>{{ categoryTitle }}</h4>
+			</div>
+			<form enctype="multipart/form-data" action="admin.php?page=content" method="post">
+				<table class="bordered striped">
+			        <thead>
+			          	<tr>
+							<th data-field="id"></th>
+							<th data-field="name">Вопрос</th>
+							<th data-field="email">Дата</th>
+							<th data-field="rights">Статус</th>
+							<th data-field="actions">Действия</th>
+			          	</tr>
+			        </thead>
+			        <tbody>
+			        {% for q in questions %}
+			          	<tr>
+				            <td>{{ q.id }}</td>
+				            <td>{{ q.q_text }}</td>
+				            <td>{{ q.q_date }}</td>
+				            <td>{{ q.status }}</td>
+				            <td>
+				            	<input type="hidden" class="" name="cat_title" value="{{ categoryTitle }}">
+				            	<input type="hidden" class="" name="cat_id" value="{{ categoryID }}">
+				            	<button class="btn-flat btn-img" type="submit" name="qaction[delete]" value="{{ q.id }}">
+                					<img title="удалить вопрос" src="../img/Document-Delete-02-24.png" alt="удалить">
+								</button>
+								<button class="btn-flat btn-img" type="submit" name="qaction[hide]" value="{{ q.id }}">
+                					<img title="скрыть вопрос" src="../img/Document-Download-24.png" alt="скрыть">
+								</button>
+								<button class="btn-flat btn-img" type="submit" name="qaction[show]" value="{{ q.id }}">
+                					<img title="опубликовать вопрос" src="../img/Document-Upload-24.png" alt="опубликовать">
+								</button>
+								<button class="btn-flat btn-img" type="submit" name="qaction[edit]" value="{{ q.id }}">
+                					<img title="редактировать вопрос" src="../img/Note-04-24.png" alt="редактировать">
+								</button>
+				            </td>
+			          	</tr>
+			          	{% if editID == q.id %}
+			          	<tr>
+			          		<td colspan="5">
+			          			<form enctype="multipart/form-data" action="admin.php?page=content" method="post">
+									<div class="row form-container">
+										<div class="input-field col s3">
+											<input type="hidden" class="" name="question_id" value="{{ q.id }}">
+											<textarea id="question-text" class="materialize-textarea" name="question_edit_text" value="">{{ q.q_text }}</textarea>
+											<label for="question-text">Текст вопроса</label>
+										</div>
+										<div class="input-field col s4">
+											<input type="hidden" class="" name="answer_id" value="{{ answerData.id }}">
+											<textarea id="answer-text" class="materialize-textarea" name="answer_edit_text" value="">{{ answerData.a_text }}</textarea>
+											<label for="answer-text">Текс ответа</label>
+										</div>
+										<div class="input-field col s2">
+											<select name="select_author">
+												{% for author in authors %}
+													{% if author.id == answerData.id_user %}
+														<option value="{{ author.id }}" selected>{{ author.name }}</option>
+													{% else %}
+														<option value="{{ author.id }}">{{ author.name }}</option>
+													{% endif %}
+												{% endfor %}
+											</select>
+											<label>Автор ответа</label>
+										</div>
+										<button class="btn-flat" type="submit" name="qaction[submit_edit]" value="{{ q.id }}">
+											<img src="../img/Documents-24.png" alt="просмотреть">сохранить
+										</button>
+										<button class="btn-flat" type="submit" name="qaction[reset_edit]" value="">
+											<img src="../img/Reload-24.png" alt="просмотреть">отменить
+										</button>
+									</div>
+								</form>
+			          		</td>
+			          	</tr>
+			          	{% endif %}
+			        {% endfor %}
+			        </tbody>
+			    </table>
+		    </form>
+			{% endif %}
+    </div>
+    <!-- TAB 3 -->
+    <div id="test3" class="col s12">
+    	<form enctype="multipart/form-data" action="admin.php?page=content" method="post">
+				<table class="bordered striped">
+			        <thead>
+			          	<tr>
+							<th data-field="id"></th>
+							<th data-field="category">Категория</th>
+							<th data-field="name">Вопрос</th>
+							<th data-field="email">Дата</th>
+							<th data-field="actions">Действия</th>
+			          	</tr>
+			        </thead>
+			        <tbody>
+			        {% for qw in questionsWait %}
+			          	<tr>
+				            <td>{{ qw.id }}</td>
+				            <td>{{ qw.title }}</td>
+				            <td>{{ qw.q_text }}</td>
+				            <td>{{ qw.q_date }}</td>
+				            <td>
+				            	<button class="btn-flat btn-img" type="submit" name="qwaction[delete]" value="{{ qw.id }}">
+                					<img title="удалить вопрос" src="../img/Document-Delete-02-24.png" alt="удалить">
+								</button>
+								<button class="btn-flat btn-img" type="submit" name="qwaction[edit]" value="{{ qw.id }}">
+                					<img title="редактировать вопрос" src="../img/Note-04-24.png" alt="редактировать">
+								</button>
+				            </td>
+			          	</tr>
+			          	{% if qwEditID == qw.id %}
+			          	<tr>
+			          		<td colspan="5">
+			          			<form enctype="multipart/form-data" action="admin.php?page=content" method="post">
+									<div class="row form-container">
+										<div class="input-field col s5">
+											<textarea id="answer-text" class="materialize-textarea" name="answer_edit_text" value=""></textarea>
+											<label for="answer-text">Текс ответа</label>
+										</div>
+										<div class="input-field col s2">
+											<select name="select_author">
+												{% for author in authors %}
+													<option value="{{ author.id }}">{{ author.name }}</option>
+												{% endfor %}
+											</select>
+											<label>Автор ответа</label>
+										</div>
+										<div class="input-field col s2">
+											<input type="hidden" class="" name="question_id" value="{{ qw.id }}">
+											<select name="select_status">
+												<option value="0" selected>ожидает ответа</option>
+												<option value="1">опубликовать</option>
+												<option value="2">скрыть</option>
+											</select>
+											<label>Статус</label>
+										</div>
+										<button class="btn-flat" type="submit" name="qwaction[submit_edit]" value="{{ qw.id }}">
+											<img src="../img/Documents-24.png" alt="просмотреть">сохранить
+										</button>
+										<button class="btn-flat" type="submit" name="qwaction[reset_edit]" value="">
+											<img src="../img/Reload-24.png" alt="просмотреть">отменить
+										</button>
+									</div>
+								</form>
+			          		</td>
+			          	</tr>
+			          	{% endif %}
+			        {% endfor %}
+			        </tbody>
+			    </table>
+		    </form>
+    </div>
+  </div>
+		</section>
+		<!-- нижний колонтитул -->
+		<footer class="footer">
+			<div class="copyright">"Гениальные мысли" @ 2016</div>
+		</footer>
+	</div>
+
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script>
+    $( document ).ready(function(){
+      $(".button-collapse").sideNav();
+      $('select').material_select();
+      $('ul.tabs').tabs();
+    })
+  </script>
+</body>
+</html>
