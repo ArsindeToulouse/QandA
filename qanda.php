@@ -4,7 +4,7 @@ use Core\Task\Category;
 use Core\Task\Question;
 use Core\Task\Answer;
 
-$categories = new Category($pdo);
+$categories = new Category();
 $categoryRows = $categories->getListOfCategories();
 $params = array(
 		'categoryRows' => $categoryRows
@@ -20,7 +20,7 @@ if(!empty($_POST)){
 				$catId = $row['id'];
 			}
 		}
-		$question = new Question($pdo);
+		$question = new Question();
 		$questions = $question->selectByCategoryAndStatus($catId, SHOW);
 		//var_dump($questions);
 		$params['questions'] = $questions;
@@ -32,7 +32,7 @@ if(!empty($_POST)){
 			$params['error'] = 'Необходимо выбрать категорию вопроса';
 			$params['q'] = $formData;
 		}else{
-			$q = new Question($pdo);
+			$q = new Question();
 			$id = $q->addNewQuestion($_POST['q']);
 			$params['success'] = 'Ваш вопрос добавлен в список.';
 		}

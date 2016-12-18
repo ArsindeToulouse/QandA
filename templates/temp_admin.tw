@@ -38,14 +38,14 @@
           <input id="pass" type="text" class="validate" name="add[pass]" value="">
           <label for="pass">Пароль</label>
         </div>
-      <button class="btn-flat" type="submit" name="submit_add" value="submit_add">
+      <button class="btn-flat" type="submit" name="submit[add]" value="add">
         добавить
       </button>
       </div>
     </form>
     {% else %}
     <form enctype="multipart/form-data" action="admin.php?page=admin" method="post">
-      <button class="btn-flat" type="submit" name="add" value="add">
+      <button class="btn-flat" type="submit" name="submit_form[add]" value="add">
         <img src="../img/Document-Add-02-24.png" alt="добавить">
         добавить администратора
       </button>
@@ -58,7 +58,7 @@
           <input id="pass" type="text" class="validate" name="change_pass" value="{{ changePass }}">
           <label for="pass">Новый пароль</label>
         </div>
-      <button class="btn-flat" type="submit" name="submit_change" value="ok">
+      <button class="btn-flat" type="submit" name="submit[change_pass]" value="change_pass">
         ОК
       </button>
       </div>
@@ -83,10 +83,10 @@
             <td>{{row.email}}</td>
             <td>{{row.rights}}</td>
             <td>
-              <button class="btn-flat btn-img" type="submit" name="delete" value="{{ row.id }}">
+              <button class="btn-flat btn-img" type="submit" name="submit[delete]" value="{{ row.id }}">
                 <img title="удалить" src="../img/Document-Delete-02-24.png" alt="удалить">
               </button>
-              <button class="btn-flat btn-img" type="submit" name="change" value="{{ row.id }}">
+              <button class="btn-flat btn-img" type="submit" name="submit_form[change]" value="{{ row.id }}">
                 <img title="сменить пароль" src="../img/Password-Text-01-24.png" alt="сменить пароль">
               </button>
             </td>

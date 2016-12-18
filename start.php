@@ -9,5 +9,5 @@ $twig = new Twig_Environment($loader, array('cache' => 'tmp/cache', 'auto_reload
 
 $twig->getExtension('Twig_Extension_Core')->setTimezone('Europe/Moscow');
 
-$db = ConnectDB::getInstance(HOST, DB, USER, PASS);
-$pdo = $db->getPDO();
+//$db = ConnectDB::getInstance(HOST, DB, USER, PASS);
+//$pdo = $db->getPDO();

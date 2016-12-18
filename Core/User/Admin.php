@@ -1,32 +1,35 @@
 <?php
 namespace Core\User;
+
+//use Core\Utils\PDO;
 /**
 * 
 */
 class Admin extends User{
+	//use PDO;
 
 	private $login;
 	private $privilege;
 	
-	function __construct($pdo){
+	/*function __construct($pdo){
 		parent::__construct($pdo);
-	}
+	}*/
 	public function findeAll(){
-		$stmt = $this->pdo->prepare("SELECT * FROM admins");
+		$stmt = $this->getPDO()->prepare("SELECT * FROM admins");
 		if($stmt->execute()){
 			return $stmt->fetchAll();
 		}
 		return [];
 	}
 	public function find(){
-		$stmt = $this->pdo->prepare("SELECT id, name FROM admins");
+		$stmt = $this->getPDO()->prepare("SELECT id, name FROM admins");
 		if($stmt->execute()){
 			return $stmt->fetchAll();
 		}
 		return [];
 	}
 	public function get($login, $password){
-		$stmt = $this->pdo->prepare("SELECT * FROM admins WHERE name = :login");
+		$stmt = $this->getPDO()->prepare("SELECT * FROM admins WHERE name = :login");
 		if($stmt->execute(array(':login' => $login))){
 			$row = $stmt->fetch();
 			$result = (password_verify($password, $row['pass'])) ? $row['id'] : false;
@@ -37,14 +40,14 @@ class Admin extends User{
 	}
 	public function set($id){
 		$this->id = $id;
-		$stmt = $this->pdo->prepare("SELECT name, rights FROM admins WHERE id = :id");
+		$stmt = $this->getPDO()->prepare("SELECT name, rights FROM admins WHERE id = :id");
 		$stmt->execute(array(':id' => $id));
 		$row = $stmt->fetch();
 		$this->login = $row['name'];
 		$this->privilege = $row['rights'];
 	}
 	public function add($userData){
-		$stmt = $this->pdo->prepare("INSERT INTO admins (name, email, rights, pass) 
+		$stmt = $this->getPDO()->prepare("INSERT INTO admins (name, email, rights, pass) 
 			VALUES (:name, :email, :rights, :pass)");
 		$pass = password_hash($userData['pass'], PASSWORD_BCRYPT);
         $stmt->execute(array(':name' => $userData['login'], 
@@ -53,13 +56,13 @@ class Admin extends User{
         	':pass' => $pass));
 	}
 	public function delete($id){
-		$stmt = $this->pdo->prepare("DELETE FROM admins WHERE id = :id");
+		$stmt = $this->getPDO()->prepare("DELETE FROM admins WHERE id = :id");
 		$stmt->execute(array(':id' => $id));
 	}
 	public function changePass($id){
 		$pass = self::getPass();
 		$hashPass = password_hash($pass, PASSWORD_BCRYPT);
-		$stmt = $this->pdo->prepare("UPDATE admins SET pass = :pass WHERE id = :id");
+		$stmt = $this->getPDO()->prepare("UPDATE admins SET pass = :pass WHERE id = :id");
 		$stmt->execute(array(':pass' => $hashPass, ':id' => $id));
 		return $pass;
 	}
